@@ -1,0 +1,20 @@
+# https://github.com/SushiFu/traefik-local
+# mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "local.test" "*.local.test"
+# docker network create local-test
+version: "3"
+services:
+  apache:
+    restart: always
+    image: httpd:alpine
+    networks:
+      - local-test
+    volumes:
+      - ./dist/:/usr/local/apache2/htdocs
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=local-test
+      - traefik.frontend.rule=Host:ppt.local.test
+
+networks:
+  local-test:
+    external: true

@@ -60,5 +60,8 @@
         "webpack-chain": "5.1.0",
         "webpack-dev-server": "3.1.14",
         "webpack-merge": "4.2.1"
+    },
+    "devDependencies": {
+        "html-webpack-inline-source-plugin": "^1.0.0-beta.2"
     }
 }

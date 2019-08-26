@@ -65,6 +65,7 @@ module.exports = (api, options) => {
             }
         };
 
+        const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
         const htmlOptions = {
             templateParameters: (compilation, assets, pluginOptions) => {
                 // enhance html-webpack-plugin's built in template params
@@ -76,6 +77,10 @@ module.exports = (api, options) => {
                     },
                     compilation: compilation,
                     webpackConfig: compilation.options,
+                    // htmlWebpackPlugin: new HtmlWebpackInlineSourcePlugin({
+                    //     files: assets,
+                    //     options: pluginOptions
+                    // })
                     htmlWebpackPlugin: {
                         files: assets,
                         options: pluginOptions
@@ -94,7 +99,8 @@ module.exports = (api, options) => {
                     removeScriptTypeAttributes: true
                     // more options:
                     // https://github.com/kangax/html-minifier#options-quick-reference
-                }
+                },
+                inlineSource: '.(js|css)$' // embed all javascript and css inline
             });
 
             // keep chunk ids stable so async chunks have consistent hash (#1916)
@@ -125,6 +131,7 @@ module.exports = (api, options) => {
             if (isProd) {
                 htmlOptions.filename = api.getEntryName() + '.html';
             }
+            webpackConfig.plugin('inline-source').use(new HtmlWebpackInlineSourcePlugin(HTMLPlugin));
             webpackConfig.plugin('html').use(HTMLPlugin, [htmlOptions]);
         } else {
             // multi-page setup
